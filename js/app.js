@@ -300,31 +300,61 @@
     document.getElementById("story-close").focus();
   }
 
-  function renderStoryTabs(weekNum, activeLens) {
+  function renderStoryTabs(weekNum, activeKey) {
     const wrap = document.getElementById("story-tabs");
     wrap.innerHTML = "";
-    const allBtn = el("button", "story-tab" + (activeLens === "all" ? " is-active" : ""), "All Voices");
+    const allBtn = el("button", "story-tab" + (activeKey === "all" ? " is-active" : ""), "All Voices");
     allBtn.type = "button";
     allBtn.addEventListener("click", () => showStoryFeed(weekNum, "all"));
     wrap.appendChild(allBtn);
 
     LENSES.forEach((lens) => {
-      const btn = el("button", "story-tab" + (activeLens === lens.id ? " is-active" : ""), `${lens.icon} ${lens.label}`);
+      const btn = el("button", "story-tab" + (activeKey === lens.id ? " is-active" : ""), `${lens.icon} ${lens.label}`);
       btn.type = "button";
       btn.addEventListener("click", () => showStoryFeed(weekNum, lens.id));
       wrap.appendChild(btn);
     });
+
+    const chronicleBtn = el(
+      "button",
+      "story-tab story-tab--chronicle" + (activeKey === "chronicle" ? " is-active" : ""),
+      "📖 Full Story"
+    );
+    chronicleBtn.type = "button";
+    chronicleBtn.addEventListener("click", () => showStoryChronicle(weekNum));
+    wrap.appendChild(chronicleBtn);
+  }
+
+  function showStoryChronicle(weekNum) {
+    document.getElementById("story-lens-picker").hidden = true;
+    document.getElementById("story-feed-wrap").hidden = false;
+    renderStoryTabs(weekNum, "chronicle");
+
+    document.getElementById("story-feed").hidden = true;
+    const chronicleEl = document.getElementById("story-chronicle");
+    chronicleEl.hidden = false;
+
+    const paragraphs = CHRONICLES[weekNum] || [];
+    const wordCount = paragraphs.join(" ").split(/\s+/).length;
+    const readMins = Math.max(1, Math.round(wordCount / 200));
+
+    chronicleEl.innerHTML = `
+      <p class="story-chronicle__meta">${readMins} min read</p>
+      ${paragraphs.map((p) => `<p>${p}</p>`).join("")}
+    `;
   }
 
   function showStoryFeed(weekNum, lensId) {
     document.getElementById("story-lens-picker").hidden = true;
     const feedWrap = document.getElementById("story-feed-wrap");
     feedWrap.hidden = false;
+    document.getElementById("story-chronicle").hidden = true;
 
     renderStoryTabs(weekNum, lensId);
 
     const posts = (STORIES[weekNum] || []).filter((p) => lensId === "all" || p.voice === lensId);
     const feed = document.getElementById("story-feed");
+    feed.hidden = false;
     feed.innerHTML = "";
 
     posts.forEach((post) => {
