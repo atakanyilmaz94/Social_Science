@@ -141,6 +141,26 @@ h3 {
   color: var(--accent);
 }
 
+@media (max-width: 560px) {
+  .site-nav__inner {
+    padding: 12px 16px;
+  }
+
+  .site-nav__brand {
+    font-size: 0.88rem;
+    white-space: nowrap;
+  }
+
+  .site-nav__links {
+    gap: 12px;
+  }
+
+  .site-nav__links a {
+    font-size: 0.76rem;
+    white-space: nowrap;
+  }
+}
+
 /* ---------- Hero ---------- */
 
 .hero {
@@ -263,6 +283,12 @@ h3 {
   font-size: 1rem;
 }
 
+.section-head--center {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
 .section--alt {
   background: var(--bg-alt);
   border-top: 1px solid var(--border);
@@ -332,15 +358,51 @@ h3 {
   font-size: 1.5rem;
 }
 
-.week-card__title {
+.week-card__hook {
   font-size: 1.08rem;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
+}
+
+.week-card__topic {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin: 0 0 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
 }
 
 .week-card__summary {
   color: var(--text-muted);
   font-size: 0.9rem;
+  margin: 0 0 14px;
+}
+
+.week-card__required {
+  list-style: none;
   margin: 0 0 16px;
+  padding: 0;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  border-left: 2px solid var(--border);
+  padding-left: 10px;
+}
+
+.week-card__required li {
+  margin-bottom: 4px;
+}
+
+.week-card__required li::before {
+  content: "* ";
+  color: var(--era-color, var(--accent));
+  font-weight: 700;
+}
+
+.week-card__foot {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .week-card__era {
@@ -351,6 +413,25 @@ h3 {
   background: color-mix(in srgb, var(--era-color, var(--accent)) 14%, transparent);
   padding: 4px 10px;
   border-radius: 999px;
+}
+
+.week-card__assessment {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #fff;
+  background: var(--era-color, var(--accent));
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.week-card.is-highlighted {
+  animation: week-pulse 1.3s ease 2;
+}
+
+@keyframes week-pulse {
+  0%, 100% { box-shadow: var(--shadow); }
+  50% { box-shadow: 0 0 0 4px var(--era-color, var(--accent)), var(--shadow); }
 }
 
 .weeks-controls {
@@ -566,6 +647,243 @@ h3 {
   .tl-event:nth-child(even) .tl-event__head {
     justify-content: flex-start;
   }
+}
+
+/* ---------- Quiz ---------- */
+
+.quiz-panel {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.quiz-progress {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.quiz-progress__track {
+  flex: 1;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--border);
+  overflow: hidden;
+}
+
+.quiz-progress__bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-soft));
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+.quiz-progress__label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.quiz-question,
+.quiz-result {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.quiz-question.is-visible,
+.quiz-result.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.quiz-question__text {
+  font-size: 1.3rem;
+  text-align: center;
+  margin-bottom: 26px;
+}
+
+.quiz-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.quiz-option {
+  text-align: left;
+  padding: 16px 20px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.95rem;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.15s, background 0.2s;
+}
+
+.quiz-option:hover {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+  transform: translateX(2px);
+}
+
+.quiz-result {
+  text-align: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 5px solid var(--era-color, var(--accent));
+  border-radius: var(--radius);
+  padding: 40px 30px;
+  box-shadow: var(--shadow);
+}
+
+.quiz-result__eyebrow {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+
+.quiz-result__icon {
+  display: block;
+  font-size: 3rem;
+  margin-bottom: 6px;
+}
+
+.quiz-result__name {
+  font-size: 1.7rem;
+  margin-bottom: 4px;
+}
+
+.quiz-result__epithet {
+  color: var(--era-color, var(--accent));
+  font-weight: 600;
+  margin-bottom: 18px;
+}
+
+.quiz-result__desc {
+  color: var(--text-muted);
+  max-width: 480px;
+  margin: 0 auto 28px;
+}
+
+.quiz-result__actions {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.quiz-skip {
+  display: block;
+  text-align: center;
+  margin-top: 28px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+.quiz-skip:hover {
+  color: var(--accent);
+}
+
+/* ---------- Course info ---------- */
+
+.course-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.course-info-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 26px;
+  box-shadow: var(--shadow);
+}
+
+.course-info-card h3 {
+  font-size: 1.05rem;
+  margin-bottom: 14px;
+}
+
+.course-info-instructor {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin: 6px 0 16px;
+}
+
+.course-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.course-meta span {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  border-left: 2px solid var(--accent);
+  padding-left: 10px;
+}
+
+.course-books {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.course-books li {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  padding-left: 16px;
+  position: relative;
+}
+
+.course-books li::before {
+  content: "•";
+  color: var(--accent);
+  position: absolute;
+  left: 0;
+}
+
+.grade-row {
+  display: grid;
+  grid-template-columns: 90px 1fr 40px;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.grade-row__label {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.grade-row__bar {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--bg-alt);
+  overflow: hidden;
+}
+
+.grade-row__fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-soft));
+  border-radius: 999px;
+}
+
+.grade-row__value {
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-align: right;
 }
 
 /* ---------- Footer ---------- */

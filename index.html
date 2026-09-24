@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>History of Diplomacy — POLSIR Course Guide</title>
-<meta name="description" content="An interactive syllabus and infographic timeline of diplomatic history, from the 1648 Peace of Westphalia to the end of World War II in 1945." />
+<title>Diplomatic History — POL3415</title>
+<meta name="description" content="An interactive guide to POL3415 Diplomatic History: find out which historical diplomat you'd be, then explore the 12-week syllabus and infographic timeline from the Peace of Westphalia to the end of World War II." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -15,8 +15,9 @@
 
 <nav class="site-nav">
   <div class="container site-nav__inner">
-    <a href="#top" class="site-nav__brand">History of <span>Diplomacy</span></a>
+    <a href="#top" class="site-nav__brand">POL3415 <span>Diplomatic History</span></a>
     <ul class="site-nav__links">
+      <li><a href="#quiz">Quiz</a></li>
       <li><a href="#syllabus">Syllabus</a></li>
       <li><a href="#timeline">Timeline</a></li>
     </ul>
@@ -25,24 +26,20 @@
 
 <header class="hero" id="top">
   <div class="container">
-    <p class="eyebrow">POLSIR · History of Diplomacy</p>
-    <h1 class="hero__title">From Westphalia to the End of World War&nbsp;II</h1>
+    <p class="eyebrow">POL3415 · Diplomatic History</p>
+    <h1 class="hero__title">If You Lived Through History, Who Would You Be?</h1>
     <p class="hero__subtitle">
-      A 12-week journey through the diplomatic history of the modern state system —
-      scroll through the weekly syllabus and explore the infographic timeline of the
-      events that shaped it.
+      From the 1648 Peace of Westphalia to the end of World War II, this course traces
+      how diplomats, revolutionaries, and statesmen negotiated, allied, and clashed
+      across three centuries. Answer six questions to find your match — then meet
+      the course built around figures just like them.
     </p>
-    <div class="hero__meta">
-      <span>1648 – 1945</span>
-      <span>12 Weeks</span>
-      <span>4 Eras</span>
-    </div>
     <div class="hero__cta">
-      <a href="#syllabus" class="btn btn--primary">View Syllabus</a>
-      <a href="#timeline" class="btn btn--ghost">Explore Timeline</a>
+      <a href="#quiz" class="btn btn--primary">Take the Diplomat Quiz</a>
+      <a href="#syllabus" class="btn btn--ghost">Skip to Syllabus</a>
     </div>
     <div class="hero__scroll-hint">
-      Scroll to explore
+      Scroll to begin
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M12 5v14M5 12l7 7 7-7" stroke-linecap="round" stroke-linejoin="round" />
       </svg>
@@ -50,12 +47,52 @@
   </div>
 </header>
 
+<section class="section" id="quiz">
+  <div class="container">
+    <div class="section-head section-head--center">
+      <p class="eyebrow">The Diplomat Quiz</p>
+      <h2>Find your historical match</h2>
+      <p>Six questions, six centuries of diplomatic instinct. Answer honestly — there are no wrong moves, only different doctrines.</p>
+    </div>
+
+    <div class="quiz-panel">
+      <div class="quiz-progress">
+        <div class="quiz-progress__track"><div class="quiz-progress__bar" id="quiz-progress-bar"></div></div>
+        <span class="quiz-progress__label" id="quiz-progress-label">Question 1</span>
+      </div>
+      <div id="quiz-stage"></div>
+      <a href="#syllabus" id="quiz-skip" class="quiz-skip">Skip the quiz, go straight to the syllabus →</a>
+    </div>
+  </div>
+</section>
+
+<section class="section section--alt" id="course-info">
+  <div class="container">
+    <div class="course-info-grid">
+      <div class="course-info-card">
+        <p class="eyebrow">Course at a Glance</p>
+        <h2>POL3415 Diplomatic History</h2>
+        <p class="course-info-instructor">Instructor: <span id="course-instructor"></span></p>
+        <div class="course-meta" id="course-meta"></div>
+      </div>
+      <div class="course-info-card">
+        <h3>Required Reading</h3>
+        <ul class="course-books" id="course-books"></ul>
+      </div>
+      <div class="course-info-card">
+        <h3>Grading Breakdown</h3>
+        <div id="course-grading"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="section" id="syllabus">
   <div class="container">
     <div class="section-head">
       <p class="eyebrow">Weekly Syllabus</p>
       <h2>What we cover, week by week</h2>
-      <p>Swipe or scroll through the course plan — each card marks the week's topic and its place in the broader era of diplomatic history.</p>
+      <p>Swipe or scroll through the course plan — each card marks the week's story, its required reading, and its place in the broader era.</p>
     </div>
 
     <div class="weeks-carousel">
@@ -89,7 +126,7 @@
 
 <footer class="site-footer">
   <div class="container">
-    <p>History of Diplomacy · POLSIR Course Guide · &copy; <span id="year"></span></p>
+    <p>POL3415 Diplomatic History · &copy; <span id="year"></span></p>
   </div>
 </footer>
 

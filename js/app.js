@@ -2,12 +2,168 @@
   "use strict";
 
   const eraById = Object.fromEntries(ERAS.map((e) => [e.id, e]));
+  const personaById = Object.fromEntries(PERSONAS.map((p) => [p.id, p]));
 
   function el(tag, className, html) {
     const node = document.createElement(tag);
     if (className) node.className = className;
     if (html !== undefined) node.innerHTML = html;
     return node;
+  }
+
+  /* ---------- Quiz ---------- */
+
+  const quizState = {
+    index: 0,
+    scores: {},
+  };
+
+  function resetQuiz() {
+    quizState.index = 0;
+    quizState.scores = {};
+    PERSONAS.forEach((p) => (quizState.scores[p.id] = 0));
+  }
+
+  function renderQuizProgress() {
+    const bar = document.getElementById("quiz-progress-bar");
+    const label = document.getElementById("quiz-progress-label");
+    const pct = (quizState.index / QUIZ.length) * 100;
+    bar.style.width = pct + "%";
+    label.textContent = `Question ${Math.min(quizState.index + 1, QUIZ.length)} of ${QUIZ.length}`;
+  }
+
+  function renderQuizQuestion() {
+    const q = QUIZ[quizState.index];
+    const stage = document.getElementById("quiz-stage");
+    renderQuizProgress();
+
+    const card = el("div", "quiz-question");
+    card.innerHTML = `<h3 class="quiz-question__text">${q.question}</h3>`;
+    const optWrap = el("div", "quiz-options");
+    q.options.forEach((opt) => {
+      const btn = el("button", "quiz-option", opt.text);
+      btn.type = "button";
+      btn.addEventListener("click", () => selectOption(opt.persona));
+      optWrap.appendChild(btn);
+    });
+    card.appendChild(optWrap);
+
+    stage.innerHTML = "";
+    stage.appendChild(card);
+    requestAnimationFrame(() => card.classList.add("is-visible"));
+  }
+
+  function selectOption(personaId) {
+    quizState.scores[personaId] = (quizState.scores[personaId] || 0) + 1;
+    quizState.index += 1;
+    if (quizState.index < QUIZ.length) {
+      renderQuizQuestion();
+    } else {
+      renderQuizResult();
+    }
+  }
+
+  function topPersona() {
+    let best = PERSONAS[0].id;
+    let bestScore = -1;
+    PERSONAS.forEach((p) => {
+      const s = quizState.scores[p.id] || 0;
+      if (s > bestScore) {
+        bestScore = s;
+        best = p.id;
+      }
+    });
+    return personaById[best];
+  }
+
+  function renderQuizResult() {
+    const bar = document.getElementById("quiz-progress-bar");
+    const label = document.getElementById("quiz-progress-label");
+    bar.style.width = "100%";
+    label.textContent = "Result";
+
+    const persona = topPersona();
+    const era = eraById[WEEKS.find((w) => w.week === persona.weekRef).era];
+    const stage = document.getElementById("quiz-stage");
+
+    const card = el("div", "quiz-result");
+    card.style.setProperty("--era-color", era.color);
+    card.innerHTML = `
+      <p class="quiz-result__eyebrow">If you lived through history, you'd be</p>
+      <span class="quiz-result__icon" aria-hidden="true">${persona.icon}</span>
+      <h3 class="quiz-result__name">${persona.name}</h3>
+      <p class="quiz-result__epithet">${persona.epithet}</p>
+      <p class="quiz-result__desc">${persona.description}</p>
+      <div class="quiz-result__actions">
+        <button type="button" class="btn btn--primary" id="quiz-continue">Continue to Week ${persona.weekRef} →</button>
+        <button type="button" class="btn btn--ghost" id="quiz-retake">Retake the Quiz</button>
+      </div>
+    `;
+    stage.innerHTML = "";
+    stage.appendChild(card);
+    requestAnimationFrame(() => card.classList.add("is-visible"));
+
+    document.getElementById("quiz-continue").addEventListener("click", () => {
+      goToWeek(persona.weekRef);
+    });
+    document.getElementById("quiz-retake").addEventListener("click", () => {
+      resetQuiz();
+      renderQuizQuestion();
+    });
+  }
+
+  function goToWeek(weekNum) {
+    const target = document.querySelector(`.week-card[data-week="${weekNum}"]`);
+    const syllabus = document.getElementById("syllabus");
+    if (syllabus) syllabus.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (target) {
+      setTimeout(() => {
+        target.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+        target.classList.add("is-highlighted");
+        setTimeout(() => target.classList.remove("is-highlighted"), 2600);
+      }, 500);
+    }
+  }
+
+  function initQuiz() {
+    resetQuiz();
+    renderQuizQuestion();
+    const skip = document.getElementById("quiz-skip");
+    if (skip) {
+      skip.addEventListener("click", (e) => {
+        e.preventDefault();
+        document.getElementById("syllabus").scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    }
+  }
+
+  /* ---------- Course-at-a-glance ---------- */
+
+  function renderCourseInfo() {
+    const metaWrap = document.getElementById("course-meta");
+    metaWrap.innerHTML = `
+      <span>${COURSE.semester}</span>
+      <span>${COURSE.schedule}</span>
+      <span>${COURSE.credits}</span>
+    `;
+
+    const booksWrap = document.getElementById("course-books");
+    COURSE.requiredBooks.forEach((b) => {
+      booksWrap.appendChild(el("li", null, b));
+    });
+
+    const gradeWrap = document.getElementById("course-grading");
+    COURSE.grading.forEach((g) => {
+      const row = el("div", "grade-row");
+      row.innerHTML = `
+        <span class="grade-row__label">${g.component}</span>
+        <div class="grade-row__bar"><div class="grade-row__fill" style="width:${g.weight}%"></div></div>
+        <span class="grade-row__value">${g.weight}%</span>
+      `;
+      gradeWrap.appendChild(row);
+    });
+
+    document.getElementById("course-instructor").textContent = COURSE.instructor;
   }
 
   /* ---------- Weekly syllabus (scrollable carousel) ---------- */
@@ -19,14 +175,28 @@
       const card = el("article", "week-card");
       card.style.setProperty("--era-color", era.color);
       card.dataset.era = w.era;
+      card.dataset.week = w.week;
+
+      const requiredHtml = w.required
+        .map((r) => `<li>${r}</li>`)
+        .join("");
+      const assessmentHtml = w.assessment
+        ? `<span class="week-card__assessment">${w.assessment}</span>`
+        : "";
+
       card.innerHTML = `
         <div class="week-card__top">
           <span class="week-card__num">Week ${w.week}</span>
           <span class="week-card__icon" aria-hidden="true">${w.icon}</span>
         </div>
-        <h3 class="week-card__title">${w.title}</h3>
+        <h3 class="week-card__hook">${w.hook}</h3>
+        <p class="week-card__topic">${w.topic}</p>
         <p class="week-card__summary">${w.summary}</p>
-        <span class="week-card__era">${era.label}</span>
+        <ul class="week-card__required">${requiredHtml}</ul>
+        <div class="week-card__foot">
+          <span class="week-card__era">${era.label}</span>
+          ${assessmentHtml}
+        </div>
       `;
       track.appendChild(card);
     });
@@ -192,6 +362,8 @@
   }
 
   document.addEventListener("DOMContentLoaded", () => {
+    renderCourseInfo();
+    initQuiz();
     renderWeeks();
     initCarousel();
     renderEraFilters();
