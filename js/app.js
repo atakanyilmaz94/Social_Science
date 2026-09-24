@@ -197,8 +197,15 @@
           <span class="week-card__era">${era.label}</span>
           ${assessmentHtml}
         </div>
+        <button type="button" class="week-card__story-btn" data-story-week="${w.week}">Read the Story →</button>
       `;
       track.appendChild(card);
+    });
+
+    track.addEventListener("click", (e) => {
+      const btn = e.target.closest("[data-story-week]");
+      if (!btn) return;
+      openStory(Number(btn.dataset.storyWeek));
     });
   }
 
@@ -248,6 +255,118 @@
       window.requestAnimationFrame(updateActive);
     });
     updateActive();
+  }
+
+  /* ---------- Week story modal ---------- */
+
+  const lensById = Object.fromEntries(LENSES.map((l) => [l.id, l]));
+  let activeStoryWeek = null;
+  let lastFocusedEl = null;
+
+  function openStory(weekNum) {
+    const week = WEEKS.find((w) => w.week === weekNum);
+    const era = eraById[week.era];
+    activeStoryWeek = weekNum;
+    lastFocusedEl = document.activeElement;
+
+    document.getElementById("story-week-num").textContent = `Week ${week.week}`;
+    document.getElementById("story-week-num").style.color = era.color;
+    document.getElementById("story-title").textContent = week.hook;
+    document.getElementById("story-topic").textContent = week.topic;
+
+    document.getElementById("story-lens-picker").hidden = false;
+    document.getElementById("story-feed-wrap").hidden = true;
+
+    const optWrap = document.getElementById("story-lens-options");
+    optWrap.innerHTML = "";
+    LENSES.forEach((lens) => {
+      const btn = el("button", "story-lens-option");
+      btn.type = "button";
+      btn.style.setProperty("--era-color", era.color);
+      btn.innerHTML = `
+        <span class="story-lens-option__icon" aria-hidden="true">${lens.icon}</span>
+        <span class="story-lens-option__label">${lens.label}</span>
+        <span class="story-lens-option__blurb">${lens.blurb}</span>
+      `;
+      btn.addEventListener("click", () => showStoryFeed(weekNum, lens.id));
+      optWrap.appendChild(btn);
+    });
+
+    document.getElementById("story-lens-skip").onclick = () => showStoryFeed(weekNum, "all");
+
+    const overlay = document.getElementById("story-overlay");
+    overlay.classList.add("is-open");
+    document.body.classList.add("story-open");
+    document.getElementById("story-close").focus();
+  }
+
+  function renderStoryTabs(weekNum, activeLens) {
+    const wrap = document.getElementById("story-tabs");
+    wrap.innerHTML = "";
+    const allBtn = el("button", "story-tab" + (activeLens === "all" ? " is-active" : ""), "All Voices");
+    allBtn.type = "button";
+    allBtn.addEventListener("click", () => showStoryFeed(weekNum, "all"));
+    wrap.appendChild(allBtn);
+
+    LENSES.forEach((lens) => {
+      const btn = el("button", "story-tab" + (activeLens === lens.id ? " is-active" : ""), `${lens.icon} ${lens.label}`);
+      btn.type = "button";
+      btn.addEventListener("click", () => showStoryFeed(weekNum, lens.id));
+      wrap.appendChild(btn);
+    });
+  }
+
+  function showStoryFeed(weekNum, lensId) {
+    document.getElementById("story-lens-picker").hidden = true;
+    const feedWrap = document.getElementById("story-feed-wrap");
+    feedWrap.hidden = false;
+
+    renderStoryTabs(weekNum, lensId);
+
+    const posts = (STORIES[weekNum] || []).filter((p) => lensId === "all" || p.voice === lensId);
+    const feed = document.getElementById("story-feed");
+    feed.innerHTML = "";
+
+    posts.forEach((post) => {
+      const lens = lensById[post.voice];
+      const item = el("article", "story-post");
+      item.innerHTML = `
+        <div class="story-post__avatar" aria-hidden="true">${lens.icon}</div>
+        <div class="story-post__body">
+          <div class="story-post__meta">
+            <span class="story-post__name">${lens.label}</span>
+            <span class="story-post__handle">${lens.handle}</span>
+            ${post.date ? `<span class="story-post__dot">·</span><span class="story-post__date">${post.date}</span>` : ""}
+          </div>
+          <p class="story-post__text">${post.text}</p>
+          <p class="story-post__detail">${post.detail}</p>
+          <button type="button" class="story-post__toggle">Show more</button>
+        </div>
+      `;
+      const toggle = item.querySelector(".story-post__toggle");
+      toggle.addEventListener("click", () => {
+        const expanded = item.classList.toggle("is-expanded");
+        toggle.textContent = expanded ? "Show less" : "Show more";
+      });
+      feed.appendChild(item);
+    });
+  }
+
+  function closeStory() {
+    document.getElementById("story-overlay").classList.remove("is-open");
+    document.body.classList.remove("story-open");
+    activeStoryWeek = null;
+    if (lastFocusedEl) lastFocusedEl.focus();
+  }
+
+  function initStoryModal() {
+    document.getElementById("story-close").addEventListener("click", closeStory);
+    document.getElementById("story-overlay").addEventListener("click", (e) => {
+      if (e.target.id === "story-overlay") closeStory();
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && activeStoryWeek !== null) closeStory();
+    });
   }
 
   /* ---------- Timeline / infographic ---------- */
@@ -366,6 +485,7 @@
     initQuiz();
     renderWeeks();
     initCarousel();
+    initStoryModal();
     renderEraFilters();
     renderTimeline();
     initReveal();

@@ -124,6 +124,28 @@
   </div>
 </section>
 
+<div class="story-overlay" id="story-overlay">
+  <div class="story-modal" role="dialog" aria-modal="true" aria-labelledby="story-title">
+    <button type="button" class="story-close" id="story-close" aria-label="Close story">✕</button>
+    <div class="story-header">
+      <span class="story-header__week" id="story-week-num"></span>
+      <h2 class="story-header__title" id="story-title"></h2>
+      <p class="story-header__topic" id="story-topic"></p>
+    </div>
+
+    <div class="story-lens-picker" id="story-lens-picker">
+      <p class="story-lens-picker__prompt">Whose eyes do you want to see this week through?</p>
+      <div class="story-lens-options" id="story-lens-options"></div>
+      <button type="button" class="story-lens-skip" id="story-lens-skip">Show me every perspective →</button>
+    </div>
+
+    <div class="story-feed-wrap" id="story-feed-wrap" hidden>
+      <div class="story-tabs" id="story-tabs"></div>
+      <div class="story-feed" id="story-feed"></div>
+    </div>
+  </div>
+</div>
+
 <footer class="site-footer">
   <div class="container">
     <p>POL3415 Diplomatic History · &copy; <span id="year"></span></p>
