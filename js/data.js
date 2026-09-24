@@ -430,6 +430,26 @@ const ANGLE_DEFS = [
 ];
 
 /**
+ * Optional video per week: a real, verified YouTube video students can watch
+ * to see the week's events explained. `id` is the YouTube video id (used to
+ * build both the embed and the watch-on-YouTube link). Week 1 has none — it's
+ * a course overview, not a single historical event.
+ */
+const VIDEOS = {
+  2: { id: "miWYdz28kw4", title: "The Peace of Westphalia: How a 1648 Treaty Created the Modern State", channel: null },
+  3: { id: "lTTvKwCylFY", title: "The French Revolution", channel: "CrashCourse World History #29" },
+  4: { id: "DuVw9sGpWUc", title: "The Congress of Vienna", channel: "CrashCourse European History #23" },
+  5: { id: "KSjDe9_jZk8", title: "Italian and German Unification", channel: "CrashCourse European History #27" },
+  6: { id: "KGlmlSTn-eM", title: "The Roads to World War I", channel: "CrashCourse European History #32" },
+  7: { id: "_XPZQ0LAlR4", title: "Archdukes, Cynicism, and World War I", channel: "CrashCourse World History #36" },
+  8: { id: "IIiDULrXaqQ", title: "World War I Battlefields", channel: "CrashCourse European History #33" },
+  9: { id: "ajX0wsneBlg", title: "President Wilson, The League of Nations, and Treaty of Versailles", channel: "History For Humans" },
+  10: { id: "Ojo8-GhhQcA", title: "Economic Depression and Dictators", channel: "CrashCourse European History #37" },
+  11: { id: "Q78COTwT7nE", title: "World War II", channel: "CrashCourse World History #38" },
+  12: { id: "q3mRScGa0f0", title: "The Big Three Conferences: Tehran, Yalta, Potsdam", channel: null },
+};
+
+/**
  * Per-week metadata: a one-line "why this matters" hook, and a Britannica
  * search query used to build a "Learn more" link for further reading.
  */

@@ -288,6 +288,38 @@
       <p>${meta.whyItMatters}</p>
     `;
 
+    const video = VIDEOS[weekNum];
+    const videoEl = document.getElementById("story-video");
+    if (video) {
+      videoEl.hidden = false;
+      videoEl.innerHTML = `
+        <p class="story-video__label">🎥 Watch this week, explained</p>
+        <button type="button" class="story-video__thumb" aria-label="Play video: ${video.title}">
+          <img src="https://img.youtube.com/vi/${video.id}/hqdefault.jpg" alt="" loading="lazy" />
+          <span class="story-video__play" aria-hidden="true">▶</span>
+        </button>
+        <p class="story-video__meta">
+          ${video.title}${video.channel ? ` · ${video.channel}` : ""} —
+          <a href="https://www.youtube.com/watch?v=${video.id}" target="_blank" rel="noopener noreferrer">watch on YouTube ↗</a>
+        </p>
+      `;
+      videoEl.querySelector(".story-video__thumb").addEventListener("click", () => {
+        videoEl.querySelector(".story-video__thumb").outerHTML = `
+          <div class="story-video__frame">
+            <iframe
+              src="https://www.youtube.com/embed/${video.id}?autoplay=1"
+              title="${video.title}"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+            ></iframe>
+          </div>
+        `;
+      });
+    } else {
+      videoEl.hidden = true;
+      videoEl.innerHTML = "";
+    }
+
     const paragraphs = CHRONICLES[weekNum] || [];
     const wordCount = paragraphs.join(" ").split(/\s+/).length;
     const readMins = Math.max(1, Math.round(wordCount / 200));
