@@ -259,13 +259,13 @@
 
   /* ---------- Week story modal ---------- */
 
-  const lensById = Object.fromEntries(LENSES.map((l) => [l.id, l]));
   let activeStoryWeek = null;
   let lastFocusedEl = null;
 
   function openStory(weekNum) {
     const week = WEEKS.find((w) => w.week === weekNum);
     const era = eraById[week.era];
+    const meta = WEEK_META[weekNum];
     activeStoryWeek = weekNum;
     lastFocusedEl = document.activeElement;
 
@@ -274,112 +274,53 @@
     document.getElementById("story-title").textContent = week.hook;
     document.getElementById("story-topic").textContent = week.topic;
 
-    document.getElementById("story-lens-picker").hidden = false;
-    document.getElementById("story-feed-wrap").hidden = true;
+    const whyEl = document.getElementById("story-why");
+    whyEl.style.setProperty("--era-color", era.color);
+    whyEl.innerHTML = `
+      <span class="story-why__label">Why this week matters</span>
+      <p>${meta.whyItMatters}</p>
+    `;
 
-    const optWrap = document.getElementById("story-lens-options");
-    optWrap.innerHTML = "";
-    LENSES.forEach((lens) => {
-      const btn = el("button", "story-lens-option");
-      btn.type = "button";
-      btn.style.setProperty("--era-color", era.color);
-      btn.innerHTML = `
-        <span class="story-lens-option__icon" aria-hidden="true">${lens.icon}</span>
-        <span class="story-lens-option__label">${lens.label}</span>
-        <span class="story-lens-option__blurb">${lens.blurb}</span>
+    const paragraphs = CHRONICLES[weekNum] || [];
+    const wordCount = paragraphs.join(" ").split(/\s+/).length;
+    const readMins = Math.max(1, Math.round(wordCount / 200));
+    const chronicleEl = document.getElementById("story-chronicle");
+    chronicleEl.innerHTML = `
+      <p class="story-chronicle__meta">${readMins} min read</p>
+      ${paragraphs.map((p) => `<p>${p}</p>`).join("")}
+    `;
+
+    const anglesWrap = document.getElementById("story-angles");
+    anglesWrap.innerHTML = "";
+    const weekAngles = ANGLES[weekNum] || {};
+    ANGLE_DEFS.forEach((def) => {
+      const item = el("div", "angle-item");
+      item.innerHTML = `
+        <button type="button" class="angle-item__head">
+          <span class="angle-item__icon" aria-hidden="true">${def.icon}</span>
+          <span class="angle-item__label">${def.label}</span>
+          <span class="angle-item__chevron" aria-hidden="true">▾</span>
+        </button>
+        <div class="angle-item__body"><p>${weekAngles[def.id] || ""}</p></div>
       `;
-      btn.addEventListener("click", () => showStoryFeed(weekNum, lens.id));
-      optWrap.appendChild(btn);
+      const head = item.querySelector(".angle-item__head");
+      head.addEventListener("click", () => item.classList.toggle("is-open"));
+      anglesWrap.appendChild(item);
     });
 
-    document.getElementById("story-lens-skip").onclick = () => showStoryFeed(weekNum, "all");
+    const learnMoreEl = document.getElementById("story-learnmore");
+    const britannicaUrl = `https://www.britannica.com/search?query=${encodeURIComponent(meta.britannicaQuery)}`;
+    learnMoreEl.innerHTML = `
+      <span>Want more depth than a course site can give you?</span>
+      <a href="${britannicaUrl}" target="_blank" rel="noopener noreferrer" class="btn btn--ghost">
+        Read more on Britannica ↗
+      </a>
+    `;
 
     const overlay = document.getElementById("story-overlay");
     overlay.classList.add("is-open");
     document.body.classList.add("story-open");
     document.getElementById("story-close").focus();
-  }
-
-  function renderStoryTabs(weekNum, activeKey) {
-    const wrap = document.getElementById("story-tabs");
-    wrap.innerHTML = "";
-    const allBtn = el("button", "story-tab" + (activeKey === "all" ? " is-active" : ""), "All Voices");
-    allBtn.type = "button";
-    allBtn.addEventListener("click", () => showStoryFeed(weekNum, "all"));
-    wrap.appendChild(allBtn);
-
-    LENSES.forEach((lens) => {
-      const btn = el("button", "story-tab" + (activeKey === lens.id ? " is-active" : ""), `${lens.icon} ${lens.label}`);
-      btn.type = "button";
-      btn.addEventListener("click", () => showStoryFeed(weekNum, lens.id));
-      wrap.appendChild(btn);
-    });
-
-    const chronicleBtn = el(
-      "button",
-      "story-tab story-tab--chronicle" + (activeKey === "chronicle" ? " is-active" : ""),
-      "📖 Full Story"
-    );
-    chronicleBtn.type = "button";
-    chronicleBtn.addEventListener("click", () => showStoryChronicle(weekNum));
-    wrap.appendChild(chronicleBtn);
-  }
-
-  function showStoryChronicle(weekNum) {
-    document.getElementById("story-lens-picker").hidden = true;
-    document.getElementById("story-feed-wrap").hidden = false;
-    renderStoryTabs(weekNum, "chronicle");
-
-    document.getElementById("story-feed").hidden = true;
-    const chronicleEl = document.getElementById("story-chronicle");
-    chronicleEl.hidden = false;
-
-    const paragraphs = CHRONICLES[weekNum] || [];
-    const wordCount = paragraphs.join(" ").split(/\s+/).length;
-    const readMins = Math.max(1, Math.round(wordCount / 200));
-
-    chronicleEl.innerHTML = `
-      <p class="story-chronicle__meta">${readMins} min read</p>
-      ${paragraphs.map((p) => `<p>${p}</p>`).join("")}
-    `;
-  }
-
-  function showStoryFeed(weekNum, lensId) {
-    document.getElementById("story-lens-picker").hidden = true;
-    const feedWrap = document.getElementById("story-feed-wrap");
-    feedWrap.hidden = false;
-    document.getElementById("story-chronicle").hidden = true;
-
-    renderStoryTabs(weekNum, lensId);
-
-    const posts = (STORIES[weekNum] || []).filter((p) => lensId === "all" || p.voice === lensId);
-    const feed = document.getElementById("story-feed");
-    feed.hidden = false;
-    feed.innerHTML = "";
-
-    posts.forEach((post) => {
-      const lens = lensById[post.voice];
-      const item = el("article", "story-post");
-      item.innerHTML = `
-        <div class="story-post__avatar" aria-hidden="true">${lens.icon}</div>
-        <div class="story-post__body">
-          <div class="story-post__meta">
-            <span class="story-post__name">${lens.label}</span>
-            <span class="story-post__handle">${lens.handle}</span>
-            ${post.date ? `<span class="story-post__dot">·</span><span class="story-post__date">${post.date}</span>` : ""}
-          </div>
-          <p class="story-post__text">${post.text}</p>
-          <p class="story-post__detail">${post.detail}</p>
-          <button type="button" class="story-post__toggle">Show more</button>
-        </div>
-      `;
-      const toggle = item.querySelector(".story-post__toggle");
-      toggle.addEventListener("click", () => {
-        const expanded = item.classList.toggle("is-expanded");
-        toggle.textContent = expanded ? "Show less" : "Show more";
-      });
-      feed.appendChild(item);
-    });
   }
 
   function closeStory() {

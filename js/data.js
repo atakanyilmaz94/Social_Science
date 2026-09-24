@@ -419,377 +419,212 @@ const TIMELINE = [
 ];
 
 /**
- * The four recurring "voices" that narrate each week's story as a social feed.
- * Every week's STORIES entry draws its posts from these same four lenses, so
- * picking one (e.g. "The Diplomat") gives a consistent tone across all 12 weeks.
+ * The four recurring analytical angles used to break down every week's story.
+ * ANGLES[weekNum][angle.id] holds that week's paragraph for this angle.
  */
-const LENSES = [
-  {
-    id: "diplomat",
-    label: "The Diplomat",
-    icon: "🕴️",
-    handle: "@thecongresstable",
-    blurb: "Treaties, alliances, and the view from the negotiating table.",
-  },
-  {
-    id: "witness",
-    label: "The Witness",
-    icon: "👤",
-    handle: "@onthegroundvoice",
-    blurb: "Ordinary life, caught in the middle of history.",
-  },
-  {
-    id: "correspondent",
-    label: "The Correspondent",
-    icon: "🗞️",
-    handle: "@thedispatch",
-    blurb: "The news, as it broke.",
-  },
-  {
-    id: "historian",
-    label: "The Historian",
-    icon: "🕰️",
-    handle: "@withhindsight",
-    blurb: "Looking back, connecting the dots.",
-  },
+const ANGLE_DEFS = [
+  { id: "diplomatic", label: "The Diplomatic Angle", icon: "🕴️" },
+  { id: "human", label: "The Human Cost", icon: "👤" },
+  { id: "perception", label: "How It Was Seen at the Time", icon: "🗞️" },
+  { id: "legacy", label: "The Long View", icon: "🕰️" },
 ];
 
 /**
- * Each week's story feed: an array of posts, each tagged with a `voice` matching
- * a LENSES id. `text` is the short post; `detail` is the longer paragraph shown
- * when a post is expanded.
+ * Per-week metadata: a one-line "why this matters" hook, and a Britannica
+ * search query used to build a "Learn more" link for further reading.
  */
-const STORIES = {
-  1: [
-    {
-      voice: "historian",
-      date: "1648",
-      text: "A war that killed a third of Central Europe's population finally ends — not with a victor, but with a new idea: the sovereign state. Week 2.",
-      detail: "The Peace of Westphalia didn't just end the Thirty Years' War. It replaced \"who rules by divine right\" with \"who controls this territory\" — the rule almost every state on Earth still lives by.",
-    },
-    {
-      voice: "correspondent",
-      date: "1789",
-      text: "PARIS: A mob storms a fortress. Within a decade, an entire diplomatic order built on royal bloodlines needs a new rulebook. Week 3.",
-      detail: "The storming of the Bastille held only seven prisoners — its fall mattered as a symbol, not a rescue. It's the moment popular sovereignty forces its way into a conversation diplomats had only ever had about and between monarchs.",
-    },
-    {
-      voice: "witness",
-      date: "1914",
-      text: "They told us it would be over by Christmas.",
-      detail: "Nearly every army in Europe genuinely believed 1914 would bring a short, decisive war. Four years and roughly 20 million deaths later, that belief is one of the great diplomatic miscalculations this course studies. Week 8.",
-    },
-    {
-      voice: "diplomat",
-      date: "1919",
-      text: "Twenty-seven nations. One table. And a peace so punishing it plants the seed of the next war. Week 9.",
-      detail: "The Paris Peace Conference produced the Treaty of Versailles — and a League of Nations meant to prevent this from ever happening again. It bought twenty years, not forever.",
-    },
-    {
-      voice: "historian",
-      date: "1945",
-      text: "Three men draw lines on a map that will define the next half-century. Week 12.",
-      detail: "At Yalta and Potsdam, Roosevelt, Churchill, and Stalin sketched the postwar order before the guns had even fully stopped. This course ends where a whole new one — the Cold War — begins.",
-    },
-  ],
-  2: [
-    {
-      voice: "diplomat",
-      date: "Oct 1648, Münster",
-      text: "After years of talks, the seals are finally set. Two treaties, dozens of parties, one exhausted continent.",
-      detail: "Negotiations at Münster and Osnabrück ran so long that some delegates arrived as young men and left middle-aged. For the first time, Catholic and Protestant powers negotiated as formal equals — not as heretics and the faithful.",
-    },
-    {
-      voice: "witness",
-      date: "1648, a German village",
-      text: "The soldiers finally stopped coming through. We buried more neighbors to plague and famine than to muskets.",
-      detail: "The Thirty Years' War killed an estimated 4.5–8 million people; some German states lost over a third of their population. Peace, when it came, was less a triumph than sheer exhaustion.",
-    },
-    {
-      voice: "correspondent",
-      date: "Oct 1648",
-      text: "The Holy Roman Empire fractures into hundreds of sovereign entities. Rome's authority over European politics — visibly, formally broken.",
-      detail: "Pope Innocent X condemned the treaties in the strongest terms available to him. No one listened. That, more than any single clause, marked the real shift in power away from religious authority.",
-    },
-    {
-      voice: "historian",
-      date: "",
-      text: "This is the moment scholars point to and say: here, states became the only actors that mattered.",
-      detail: "The \"Westphalian system\" — sovereignty, non-interference, formal equality between states — became the working assumption of world politics for the next 375 years, and counting.",
-    },
-  ],
-  3: [
-    {
-      voice: "correspondent",
-      date: "July 1776, Philadelphia",
-      text: "Thirteen colonies declare they no longer answer to a king. European courts call it treason. History will call it a preview.",
-      detail: "The Declaration of Independence claimed a right no diplomat of the era took for granted: that a people, not a crown, could be the source of legitimate authority.",
-    },
-    {
-      voice: "witness",
-      date: "July 1789, Paris",
-      text: "We tore the Bastille apart stone by stone. It held seven prisoners. It's what it stood for that mattered.",
-      detail: "Within months, the revolutionary government abolished feudal privileges and issued the Declaration of the Rights of Man — language no chancellery in Europe knew how to negotiate with.",
-    },
-    {
-      voice: "diplomat",
-      date: "1792",
-      text: "The old courts of Europe watch revolutionary France with horror — and start forming coalitions against an idea, not just an army.",
-      detail: "Austria and Prussia's early wars against France were fought explicitly to restore the monarchy. It didn't work, and it radicalized the revolution further.",
-    },
-    {
-      voice: "historian",
-      date: "",
-      text: "For the first time, a state claimed to speak for \"the nation,\" not a bloodline. Diplomacy would never again get to ignore public opinion.",
-      detail: "Both revolutions injected a new variable into statecraft: legitimacy could now be contested from below, not just negotiated between crowns.",
-    },
-  ],
-  4: [
-    {
-      voice: "witness",
-      date: "Dec 1805, Austerlitz",
-      text: "The fog lifted, and so did any doubt about who commanded this battlefield.",
-      detail: "Napoleon's victory at Austerlitz over the combined Austrian and Russian armies is still studied as one of the most complete tactical victories in military history.",
-    },
-    {
-      voice: "diplomat",
-      date: "1806–1812",
-      text: "One coalition after another forms against him. One after another, Napoleon breaks them.",
-      detail: "By 1810, Napoleon's empire and satellite states covered most of continental Europe — a diplomatic order held together almost entirely by force and his own person.",
-    },
-    {
-      voice: "correspondent",
-      date: "1812, Moscow",
-      text: "Moscow burns. The Grand Army that marched in 600,000 strong will stagger home a fraction of that.",
-      detail: "The Russian campaign was the turning point: a war of attrition, scorched earth, and a Russian winter that no negotiation could out-maneuver.",
-    },
-    {
-      voice: "diplomat",
-      date: "1814–15, Vienna",
-      text: "The powers that beat him now face a harder problem: how do you build a peace that outlives the war?",
-      detail: "The Congress of Vienna deliberately restored a balance of power rather than simply punishing France — a choice that bought Europe decades of relative peace.",
-    },
-    {
-      voice: "historian",
-      date: "",
-      text: "Their answer — a balance of power, managed by regular consultation among the great powers — kept Europe largely free of general war for nearly a century.",
-      detail: "This \"Concert of Europe\" is one of history's most-cited examples of diplomacy successfully engineering stability after total war.",
-    },
-  ],
-  5: [
-    {
-      voice: "diplomat",
-      date: "1862",
-      text: "\"Not by speeches and majority votes will the great questions of the day be decided — but by iron and blood.\"",
-      detail: "Bismarck said this to the Prussian parliament's budget committee in 1862. Within a decade he'd proven it: three deliberately engineered wars, one unified Germany.",
-    },
-    {
-      voice: "witness",
-      date: "1866",
-      text: "Prussia beat Austria in seven weeks. Seven weeks to redraw who leads the German-speaking world.",
-      detail: "The Austro-Prussian War was swift and decisive by design — Bismarck wanted Austria humbled, not humiliated, to keep the door open for future cooperation.",
-    },
-    {
-      voice: "correspondent",
-      date: "Jan 1871, Versailles",
-      text: "In the hall of mirrors at the palace of the kings he just defeated, a new German Empire is proclaimed.",
-      detail: "The choice of venue — the palace of Louis XIV — was a deliberate humiliation of France, one that France would not forget by 1919.",
-    },
-    {
-      voice: "diplomat",
-      date: "1873–1887",
-      text: "Alliance after alliance, each one quietly canceling out a threat. Keep France isolated. Keep everyone else talking to Berlin.",
-      detail: "Bismarck's alliance system depended entirely on his own skill at holding contradictory promises in balance — a high-wire act almost no successor could manage.",
-    },
-  ],
-  6: [
-    {
-      voice: "correspondent",
-      date: "1890",
-      text: "Bismarck is out. The new Kaiser wants to steer his own course. Berlin's carefully balanced alliances start coming apart within the decade.",
-      detail: "Kaiser Wilhelm II dismissed Bismarck and let Germany's treaty with Russia lapse — opening the door to exactly the Franco-Russian alliance Bismarck had spent years preventing.",
-    },
-    {
-      voice: "diplomat",
-      date: "1907",
-      text: "Britain, France, and Russia — old rivals — now stand together. Two blocs. Two capitals each convinced the other means them harm.",
-      detail: "The Triple Entente completed a division of Europe into two armed camps: the Entente powers and the German-led Triple Alliance.",
-    },
-    {
-      voice: "witness",
-      date: "1912",
-      text: "Every year, the newspapers report bigger navies, bigger armies. Every year, we're told it's for peace.",
-      detail: "The Anglo-German naval race became a public obsession on both sides — a visible, popular arms race that made war feel almost inevitable well before it began.",
-    },
-    {
-      voice: "historian",
-      date: "",
-      text: "By 1914, Europe had built a machine where one spark, in the wrong place, could pull every major power into war within days.",
-      detail: "Rigid mobilization timetables, interlocking alliances, and a shared assumption that offense wins wars fast — a system optimized for speed, not restraint.",
-    },
-  ],
-  7: [
-    {
-      voice: "correspondent",
-      date: "June 28, 1914, Sarajevo",
-      text: "A shot fired at an Archduke's motorcade. Almost no one yet understands what it will trigger.",
-      detail: "The assassination of Archduke Franz Ferdinand by Gavrilo Princip was the spark — but it needed five weeks of diplomatic failure to become a world war.",
-    },
-    {
-      voice: "diplomat",
-      date: "July 1914",
-      text: "Five weeks of ultimatums, mobilizations, and telegrams. Every step called \"defensive.\" Every step drags the continent closer to war.",
-      detail: "Historians still debate the July Crisis chapter by chapter — it remains the single most studied case of crisis diplomacy failing in real time.",
-    },
-    {
-      voice: "historian",
-      date: "Aug 3, 1914",
-      text: "\"The lamps are going out all over Europe; we shall not see them lit again in our lifetime.\"",
-      detail: "Sir Edward Grey, Britain's Foreign Secretary, said this the night before Britain entered the war. He was right about more than he knew.",
-    },
-    {
-      voice: "witness",
-      date: "Aug 1914",
-      text: "They said it would be over by Christmas.",
-      detail: "Every major army in 1914 planned for a short, decisive war. The trenches that followed would last four years.",
-    },
-  ],
-  8: [
-    {
-      voice: "witness",
-      date: "1916, the Somme",
-      text: "We gained a few hundred yards. It cost thousands of lives. That was considered a good week.",
-      detail: "The Battle of the Somme saw roughly 60,000 British casualties on its first day alone — one of the deadliest single days in military history.",
-    },
-    {
-      voice: "diplomat",
-      date: "1916–17",
-      text: "Behind closed doors, secret treaties carve up empires that haven't even lost yet.",
-      detail: "Agreements like Sykes-Picot quietly divided Ottoman territory among the Allies years before the war ended — commitments that would complicate the peace to come.",
-    },
-    {
-      voice: "correspondent",
-      date: "1917",
-      text: "The United States enters the war. What began as a European quarrel is now, unmistakably, a world war.",
-      detail: "Unrestricted German submarine warfare and the intercepted Zimmermann Telegram pushed a reluctant United States off the sidelines.",
-    },
-    {
-      voice: "historian",
-      date: "Nov 11, 1918",
-      text: "The guns fall silent at the eleventh hour of the eleventh day of the eleventh month. Roughly 20 million dead. The peace is still to be written.",
-      detail: "The Armistice ended the fighting, not the war — the actual peace terms would take another year of negotiation at Paris.",
-    },
-  ],
-  9: [
-    {
-      voice: "diplomat",
-      date: "Jan 1919, Paris",
-      text: "Twenty-seven victorious nations at the table. Germany isn't invited to negotiate — only to sign.",
-      detail: "The Paris Peace Conference excluded the defeated powers from negotiations entirely, a choice that shaped how the resulting treaty was received in Germany.",
-    },
-    {
-      voice: "historian",
-      date: "",
-      text: "\"A general association of nations must be formed... affording mutual guarantees of political independence.\"",
-      detail: "Wilson's Fourteen Points proposed the League of Nations — the first serious attempt at collective security. The U.S. Senate would go on to reject American membership in it.",
-    },
-    {
-      voice: "correspondent",
-      date: "June 1919",
-      text: "The Treaty of Versailles is signed in the same Hall of Mirrors where the German Empire was proclaimed in 1871. The symbolism isn't accidental.",
-      detail: "France, in particular, wanted the venue to close a symbolic loop — and to make sure Germany felt exactly how the tables had turned.",
-    },
-    {
-      voice: "witness",
-      date: "Germany, 1919",
-      text: "They call it a diktat. We weren't at the table. We were only handed the bill.",
-      detail: "War guilt clauses and reparations became a lasting grievance in German politics — one that revisionist movements would exploit for the next two decades.",
-    },
-  ],
-  10: [
-    {
-      voice: "correspondent",
-      date: "1929",
-      text: "A stock market crash in New York. Within two years, it's a crisis on every continent — and a gift to every demagogue with a simple answer.",
-      detail: "The Great Depression shattered the fragile economic assumptions the 1920s peace had been quietly built on, radicalizing politics across Europe.",
-    },
-    {
-      voice: "witness",
-      date: "Germany, early 1930s",
-      text: "Every week, the money in your pocket buys less. People start listening to whoever promises it will stop.",
-      detail: "Mass unemployment and hyperinflation's lingering scars created fertile ground for parties promising to tear up the Versailles settlement entirely.",
-    },
-    {
-      voice: "diplomat",
-      date: "Sept 1938, Munich",
-      text: "\"Peace for our time,\" they call it. Czechoslovakia isn't at the table either.",
-      detail: "Britain and France ceded the Sudetenland to Germany without Czechoslovak consent, hoping to satisfy Hitler's territorial demands once and for all.",
-    },
-    {
-      voice: "historian",
-      date: "",
-      text: "Appeasement wasn't cowardice so much as exhaustion — a continent that had buried a generation twenty years earlier, desperate not to repeat it. It didn't work.",
-      detail: "Within a year of Munich, Germany had annexed the rest of Czechoslovakia and invaded Poland — the policy's clearest verdict.",
-    },
-  ],
-  11: [
-    {
-      voice: "correspondent",
-      date: "Aug 1939",
-      text: "Berlin and Moscow — ideological enemies — sign a pact promising not to fight each other. Europe reads it as a green light.",
-      detail: "The Molotov–Ribbentrop Pact included secret protocols dividing Eastern Europe into Soviet and German spheres of influence.",
-    },
-    {
-      voice: "witness",
-      date: "Sept 1, 1939, Poland",
-      text: "The planes came before the declarations of war did.",
-      detail: "Germany's invasion of Poland, followed by the Soviet invasion from the east weeks later, triggered British and French declarations of war within days.",
-    },
-    {
-      voice: "diplomat",
-      date: "1940–41",
-      text: "Former rivals become allies out of necessity. The war is redrawing the map of who trusts whom.",
-      detail: "Germany's invasion of the Soviet Union in 1941 turned a former non-aggression partner into Britain's — and soon America's — essential ally.",
-    },
-    {
-      voice: "historian",
-      date: "Dec 1941",
-      text: "Pearl Harbor pulls the United States in. What was a European war is now, unmistakably, global — again.",
-      detail: "Within days of the attack, Germany and Italy declared war on the United States too, completing the alignment of the war's major powers.",
-    },
-  ],
-  12: [
-    {
-      voice: "diplomat",
-      date: "Nov 1943, Tehran",
-      text: "Roosevelt, Churchill, Stalin — in the same room for the first time. The postwar world starts getting sketched out before the war is even won.",
-      detail: "The Tehran Conference coordinated the coming invasion of France and opened the first real conversations about how postwar Europe would be organized.",
-    },
-    {
-      voice: "correspondent",
-      date: "Feb 1945, Yalta",
-      text: "Three men divide a continent into spheres of influence over the course of a week.",
-      detail: "Yalta's agreements on Poland's borders and Soviet influence in Eastern Europe would shape the geopolitics of the next four and a half decades.",
-    },
-    {
-      voice: "witness",
-      date: "1945",
-      text: "The war is over. Half of Europe is rubble. All of us are figuring out what \"peace\" even means now.",
-      detail: "Estimates of World War II's total deaths range from 70 to 85 million — the deadliest conflict in human history, and the backdrop against which the postwar order was built.",
-    },
-    {
-      voice: "historian",
-      date: "",
-      text: "The United Nations is founded on the ashes of the League's failure — another attempt to build a peace that holds. This course ends here. The next 80 years pick up the story.",
-      detail: "Fifty-one founding members signed the UN Charter in San Francisco in 1945 — an institution still standing, however imperfectly, on the ground this course covers.",
-    },
-  ],
+const WEEK_META = {
+  1: {
+    whyItMatters:
+      "This week sets the map for the whole course — the four eras, the big questions, and why three centuries of diplomatic failures and fixes still shape how states deal with each other today.",
+    britannicaQuery: "history of diplomacy",
+  },
+  2: {
+    whyItMatters:
+      "The Peace of Westphalia is the single most-cited starting point in the study of international relations — it's where \"sovereign state\" became the basic unit the whole system runs on, a rule still in force 375+ years later.",
+    britannicaQuery: "Peace of Westphalia",
+  },
+  3: {
+    whyItMatters:
+      "Two revolutions injected an idea old diplomacy had no tool for — that legitimacy could come from \"the people,\" not a crown — and diplomats have had to reckon with public opinion and nationalism ever since.",
+    britannicaQuery: "French Revolution",
+  },
+  4: {
+    whyItMatters:
+      "Napoleon's wars destroyed the old balance of power; the peace that followed him — the Concert of Europe — is one of history's most successful examples of great powers deliberately engineering nearly a century without general war.",
+    britannicaQuery: "Congress of Vienna",
+  },
+  5: {
+    whyItMatters:
+      "Bismarck's alliance system is the textbook case of realist diplomacy: three deliberately engineered wars, one unified Germany, and a web of treaties so intricate that almost no successor could actually run it.",
+    britannicaQuery: "unification of Germany",
+  },
+  6: {
+    whyItMatters:
+      "By 1914, Europe had built a diplomatic machine — rigid alliances, mobilization timetables, an arms race — almost perfectly designed to turn one regional crisis into a continental war.",
+    britannicaQuery: "causes of World War I",
+  },
+  7: {
+    whyItMatters:
+      "The July Crisis is still the most closely studied case of crisis diplomacy failing in real time — a five-week case study in how individually rational decisions can add up to a catastrophic, unwanted war.",
+    britannicaQuery: "July crisis 1914",
+  },
+  8: {
+    whyItMatters:
+      "The First World War didn't just kill on an unprecedented scale — it also produced the secret wartime deals and contradictory promises that would complicate the Middle East and the peace conference for decades after.",
+    britannicaQuery: "World War I",
+  },
+  9: {
+    whyItMatters:
+      "Versailles is the classic case study in the gap between a punitive peace and a durable one — and the League of Nations is the first serious, if fatally undercut, attempt at collective security.",
+    britannicaQuery: "Treaty of Versailles",
+  },
+  10: {
+    whyItMatters:
+      "Appeasement remains the reference point every debate about deterrence versus diplomacy comes back to — a policy born of genuine, understandable exhaustion that still failed to stop the war it was trying to prevent.",
+    britannicaQuery: "appeasement policy",
+  },
+  11: {
+    whyItMatters:
+      "The alliances that fought the Second World War were built out of necessity, not trust — watching them form shows how fast diplomacy can rewrite who counts as a friend.",
+    britannicaQuery: "World War II",
+  },
+  12: {
+    whyItMatters:
+      "The conferences that ended this war — Tehran, Yalta, Potsdam — didn't just close one conflict; they drew the lines the next fifty years of world politics, the Cold War included, would run along.",
+    britannicaQuery: "Yalta Conference",
+  },
 };
 
 /**
- * The long-form "Full Story" essay for each week — 4-6 paragraphs, meant to read
- * like a short lecture. Reachable from the "Full Story" tab inside a week's story
- * modal, alongside the tweet-style feed.
+ * Four analytical-angle paragraphs per week, keyed by ANGLE_DEFS id.
+ */
+const ANGLES = {
+  1: {
+    diplomatic:
+      "Diplomacy's core job is managing power without constant war — through treaties, alliances, and negotiation rather than force alone. But it has never been static: the tools available to a seventeenth-century cardinal (secret dynastic deals, religious authority) are not the tools available to a twentieth-century president answering to mass media and public opinion. This course is, at its core, a history of diplomats constantly having to invent new tools as the old ones stopped working.",
+    human:
+      "Every treaty in this course was signed over the lives of people who never got a vote on it — soldiers, peasants, refugees, and civilians whose lives were reordered by decisions made in rooms they never entered. Keeping that human cost in view, alongside the maps and treaties, is part of what this course asks of you.",
+    perception:
+      "How an era understood its own diplomacy changed enormously across these three centuries — from a private conversation among aristocrats that ordinary people barely followed, to front-page news shaping elections and public mood by the twentieth century. Tracking that shift is one of the throughlines of the course.",
+    legacy:
+      "Historians still argue about almost everything in this timeline — whether Westphalia really changed as much as it's credited with, whether appeasement was foolish or simply the least-bad option available, whether the Cold War that followed 1945 was inevitable. This course won't settle those arguments, but it will give you the background to have them properly.",
+  },
+  2: {
+    diplomatic:
+      "Negotiating an end to a war involving dozens of parties, several of them not even fully recognized as sovereign at the time, required real procedural innovation — permanent resident embassies, formal equality between negotiators regardless of a state's size, and two separate parallel conferences so rival confessions could each meet on ground they considered legitimate. Much of what looks like ordinary diplomatic protocol today was improvised here first.",
+    human:
+      "The Thirty Years' War's toll fell overwhelmingly on ordinary people in the German lands — mercenary armies that lived off whatever countryside they marched through, famine and plague following in the wake of campaigns, and, in some regions, population losses exceeding a third. The peace, when it finally came, was received less as triumph than as sheer relief that the killing had stopped.",
+    perception:
+      "Pope Innocent X formally condemned the settlement in the strongest language available to him — and was simply ignored by every Catholic power that had signed it. That, more than any specific clause, is what contemporaries understood the treaties to mean: religious authority no longer got a veto over how European states organized themselves.",
+    legacy:
+      "International relations as a field still uses \"Westphalian sovereignty\" as shorthand for the entire modern state system — non-interference, territorial control, formal equality between states. Scholars debate how much 1648 actually changed overnight versus how much this is a story historians told backward to explain a much slower process, but the label has stuck for a reason.",
+  },
+  3: {
+    diplomatic:
+      "France's decision to back the American rebels in 1778 is a textbook case of old-fashioned balance-of-power calculation serving a genuinely new kind of cause: Versailles cared little about republican ideals and a great deal about weakening Britain. A decade later, the courts of Europe faced the mirror image of that problem — a revolutionary government in France that their own old tools of dynastic diplomacy had no obvious way to negotiate with.",
+    human:
+      "The storming of the Bastille held only seven prisoners; its significance was entirely symbolic, a crowd tearing down what a hated system stood for rather than freeing meaningful numbers of people. That gap between the concrete event and its symbolic weight is a pattern worth watching for across the rest of this course — revolutions are won as much through story as through tactics.",
+    perception:
+      "European courts did not initially treat the French Revolution as a foreign policy problem so much as an ideological contagion — the fear was less that France would invade than that the idea of executing a king might spread. That fear shaped the disastrous decision to invade France to restore the monarchy, which backfired by radicalizing the revolution instead of ending it.",
+    legacy:
+      "Both revolutions are usually credited with introducing \"the nation\" as a new source of political legitimacy alongside, and eventually instead of, royal bloodlines. Diplomats after 1789 could no longer assume a treaty signed by a king settled the matter — a public, or a nation claiming to speak for one, might reject it. That problem doesn't go away for the rest of this course.",
+  },
+  4: {
+    diplomatic:
+      "Napoleon's genius was as much diplomatic as military — he broke one coalition after another not just on the battlefield but by offering each opponent, in turn, terms attractive enough to peel it away from the alliance against him. The powers that finally beat him for good understood this, which is why the Congress of Vienna deliberately avoided crushing France and instead restored it to great-power status inside a rebalanced system — a calculated bet that inclusion would be more stable than humiliation.",
+    human:
+      "The scale of Napoleonic warfare was new in kind, not just degree — mass conscription (the levée en masse) turned entire national populations into armies, and campaigns like the 1812 invasion of Russia killed soldiers by the hundreds of thousands through cold and starvation as much as combat. The Grand Army that marched into Russia 600,000 strong came home a fraction of that size.",
+    perception:
+      "Napoleon was, and remains, one of history's most contested figures — a liberator spreading revolutionary legal reform (the Napoleonic Code) to some, a conqueror who cost Europe millions of lives to satisfy one man's ambition to others. Both readings existed simultaneously among his contemporaries, and both still show up in how the era gets taught.",
+    legacy:
+      "The Concert of Europe that emerged from Vienna is one of the most frequently cited examples in modern international relations theory — proof, to some scholars, that great powers really can manage a stable balance of power through regular consultation rather than war. Its near-century of relative peace is the benchmark every later attempt at collective security, including the League of Nations and the UN, gets measured against.",
+  },
+  5: {
+    diplomatic:
+      "Bismarck's most quoted line — that great questions get decided \"by iron and blood,\" not speeches and majority votes — was a direct rejection of the liberal, parliamentary path to unification others in Prussia had argued for. He then proved it by engineering three wars in under a decade against Denmark, Austria, and France, each timed and scoped with enough precision to achieve exactly the political outcome he wanted and no more.",
+    human:
+      "Bismarck deliberately kept the Austro-Prussian War of 1866 short — seven weeks — not out of mercy but calculation: he wanted Austria humbled enough to concede but not so devastated that it couldn't later be a useful, non-hostile neighbor. It's a reminder that even brutal, engineered wars carry human costs their architects are actively managing, not just accepting.",
+    perception:
+      "The choice to proclaim the new German Empire in the Hall of Mirrors at the Palace of Versailles — the seat of the French kings Prussia had just defeated — was read across Europe exactly as intended: a deliberate, public humiliation of France. French resentment over that staging is frequently cited as one thread connecting 1871 to the harsher terms France would insist on at Versailles in 1919.",
+    legacy:
+      "Bismarck's alliance system is often taught as the high-water mark of pure realist diplomacy — and also as a cautionary tale, because it depended entirely on his personal skill at holding contradictory commitments in balance. Historians widely agree that almost no successor could have run it the way he did, which is exactly what the next two weeks of this course go on to show.",
+  },
+  6: {
+    diplomatic:
+      "Kaiser Wilhelm II's decision to let the Reinsurance Treaty with Russia lapse after dismissing Bismarck is one of history's most consequential acts of diplomatic neglect — it opened the door to exactly the Franco-Russian alliance Bismarck had spent two decades preventing, and it happened less through deliberate strategy than through a new ruler wanting to \"steer his own course.\"",
+    human:
+      "The Anglo-German naval race was not a quiet affair conducted by admirals alone — it was front-page news and a matter of public pride in both countries, with newspapers tracking dreadnought construction the way modern outlets track election polling. Ordinary citizens on both sides of the North Sea grew up genuinely expecting conflict, years before it arrived.",
+    perception:
+      "Each crisis in this period — the Moroccan standoffs of 1905 and 1911, the Balkan Wars of 1912–13 — was treated at the time as a test of resolve as much as a specific policy dispute, with each power calculating not just the issue at hand but what backing down might signal about its willingness to fight later. That logic is a big part of why the system had so little room left to de-escalate by 1914.",
+    legacy:
+      "Historians describe the pre-1914 alliance system as a machine almost perfectly engineered for rapid escalation: rigid mobilization timetables that couldn't be paused once started, alliance commitments that turned local disputes into great-power obligations, and military doctrines that all assumed offense, not defense, would win. It's one of the most frequently used case studies in political science for how structure, not just individual choices, can produce a war nobody fully wanted.",
+  },
+  7: {
+    diplomatic:
+      "Germany's \"blank check\" to Austria-Hungary — an unconditional promise of support issued within days of the assassination — removed the one form of restraint that might have kept the crisis regional. Historians still debate whether German leaders understood they were risking a general European war or genuinely believed, as in earlier crises, that Russia would back down rather than fight.",
+    human:
+      "Serbia's reply to the July ultimatum was strikingly conciliatory, accepting nearly every demand Austria-Hungary made — and Austria-Hungary declared war anyway, judging the response insufficient. That detail is often left out of popular memory of 1914, but it is central to why historians treat this crisis as a study in how leaders can talk themselves into a war that was, on paper, avoidable even at a very late stage.",
+    perception:
+      "The phrase \"it will be over by Christmas\" captures something real about 1914: essentially every general staff in Europe had planned for a short, decisive war, and mobilization timetables were built around that assumption. The shock of the four-year stalemate that followed is part of why the war left such a deep scar on the political culture of every country involved.",
+    legacy:
+      "Sir Edward Grey's line — \"the lamps are going out all over Europe\" — is one of the most quoted sentences in diplomatic history, and it's worth taking seriously as more than just a memorable phrase: Grey meant that an entire mode of diplomacy, built on personal relationships between aristocratic foreign ministers operating with wide discretion, was ending along with the peace. He was right.",
+  },
+  8: {
+    diplomatic:
+      "Wartime diplomacy ran on two tracks that frequently contradicted each other: public rhetoric about self-determination and a better postwar world, and secret agreements like the Sykes-Picot accord dividing Ottoman territory between Britain and France years before the war ended. Those contradictions — including overlapping promises made to Arab leaders and, separately, in the Balfour Declaration — would shape the peace conference and the wider Middle East for generations after the guns fell silent.",
+    human:
+      "The Battle of the Somme's first day alone produced roughly 60,000 British casualties, for territorial gains measured in a few hundred yards — a ratio of cost to gain that came to define how this war is remembered. New technology (machine guns, poison gas, and eventually tanks) made killing far more efficient without making the war meaningfully more decisive for years at a stretch.",
+    perception:
+      "The United States' entry in 1917 — triggered by unrestricted German submarine warfare and the intercepted Zimmermann Telegram proposing a German-Mexican alliance — visibly shifted global perception of the conflict from a European quarrel to a genuinely world war. It also introduced a new voice, Woodrow Wilson's, into the eventual peace negotiations, with a very different set of priorities than the exhausted European powers.",
+    legacy:
+      "The Armistice of November 11, 1918 is often misunderstood as the end of the war rather than what it actually was: a ceasefire. The real peace terms — and everything that would go right and badly wrong with them — were still a year of negotiation away, which is exactly where next week's story picks up.",
+  },
+  9: {
+    diplomatic:
+      "Excluding Germany from the actual negotiations at Paris — presenting it with terms to sign rather than debate — was a deliberate choice by the Allied powers, and one of the most consequential in the whole settlement. It let the Big Four resolve their own competing priorities (Wilson's idealism, Clemenceau's security demands, British and Italian territorial interests) without German input complicating the process, at the direct cost of German buy-in to the result.",
+    human:
+      "Reparations and the \"war guilt\" clause (Article 231) were experienced in Germany less as abstract treaty language than as a direct, ongoing squeeze on daily economic life for over a decade — a grievance that stayed vivid and personal for millions of people long after the ink dried, and one that revisionist politicians would prove very effective at channeling.",
+    perception:
+      "Wilson's Fourteen Points were received across occupied and colonized populations worldwide, not just in Europe, as a genuine promise of self-determination — expectations the actual settlement mostly did not meet outside of Europe. That gap between rhetoric and result shaped anti-colonial movements for decades, well beyond what the treaty's drafters were focused on.",
+    legacy:
+      "The League of Nations is usually taught as a noble failure: a genuinely novel institutional idea — collective security — undermined from the start by the U.S. Senate's refusal to let its own designer's country join. Historians disagree about how much the League's absence of American membership actually mattered versus how much a punitive settlement toward Germany was always going to produce a crisis the League couldn't have prevented anyway.",
+  },
+  10: {
+    diplomatic:
+      "The Locarno Treaties of 1925 and the Kellogg-Briand Pact of 1928 represented genuine diplomatic achievement — Germany voluntarily accepting its western borders, dozens of nations formally renouncing war — and both were treated by contemporaries as real, durable progress. Their near-total collapse within a decade is a sharp lesson in how much international agreements depend on the domestic political and economic conditions underneath them, not just the text on the page.",
+    human:
+      "The Great Depression's arrival in 1929 translated into mass unemployment and, in Germany especially, the still-fresh memory of the early-1920s hyperinflation that had wiped out ordinary savings. That combination of economic desperation and lingering resentment over Versailles created exactly the conditions in which a movement promising simple, forceful answers could win mass support very quickly.",
+    perception:
+      "Chamberlain's declaration of \"peace for our time\" after Munich was, in the moment, met with genuine relief and even celebration in Britain and France — a war-exhausted public desperately wanted to believe it. The rapid collapse of that belief within a year, as Germany occupied the rest of Czechoslovakia, left a lasting scar on how democracies think about negotiating with revisionist powers.",
+    legacy:
+      "Appeasement remains one of the most argued-over policies in diplomatic history — was it moral cowardice, or a rational, if ultimately failed, attempt by exhausted democracies to avoid repeating 1914–18 while they rearmed? Every later debate about deterrence versus negotiation, from the Cold War to today, invokes Munich as the reference point, for better or worse.",
+  },
+  11: {
+    diplomatic:
+      "The Molotov-Ribbentrop Pact is one of history's starkest examples of ideological enemies making a purely transactional deal — Nazi Germany and the Soviet Union had spent years denouncing each other, then signed a non-aggression pact with secret protocols dividing Eastern Europe between them within days. It gave Hitler a two-front war avoided, at least temporarily, and gave Stalin time and territory he badly wanted.",
+    human:
+      "For the civilians of Poland, the war did not arrive as a declaration read on the radio — it arrived as aircraft overhead before formal declarations of war had even been issued, followed within weeks by a second invasion from the east once the Soviet Union moved in under the pact's secret terms. Poland was effectively partitioned between two invading powers in the opening weeks of the war.",
+    perception:
+      "Operation Barbarossa's launch in June 1941 was received with genuine shock even by many in Germany's own high command, and it instantly transformed the Soviet Union's status in Allied and public perception — from an awkward, distrusted non-aggression partner of Berlin to an essential wartime ally of Britain, and soon the United States, almost overnight.",
+    legacy:
+      "The alliance structure that eventually won the war — Britain, the Soviet Union, and the United States acting together — was built entirely out of shared necessity rather than trust or shared values, and that underlying distrust never fully disappeared even at the height of wartime cooperation. It's the seed of the Cold War tensions that surface again at the very end of this course.",
+  },
+  12: {
+    diplomatic:
+      "The Tehran Conference of 1943 marked something genuinely new: the first time the eventual Big Three victors sat in the same room to discuss not just how to win the war but what the postwar world should look like, while the outcome was still genuinely uncertain. Every conference that followed — Yalta, Potsdam — built directly on the relationships and expectations established there.",
+    human:
+      "World War II's total death toll — commonly estimated between 70 and 85 million people — makes it the deadliest conflict in human history, and that scale of loss is the backdrop against which every decision at Yalta and Potsdam has to be understood. The diplomats drawing new borders and spheres of influence were doing so over a continent, and a world, in genuine ruins.",
+    perception:
+      "Yalta's agreements were presented publicly at the time as a triumph of Allied unity, even as private distrust between the Western powers and the Soviet Union was already visible beneath the surface — particularly over the political future of Poland. Contemporary reporting largely reflected the public optimism; the tensions became impossible to ignore only in the months that followed.",
+    legacy:
+      "The United Nations, founded in San Francisco in June 1945, was a deliberate attempt to avoid repeating the League of Nations' fatal flaw — but it was built by the same wartime alliance that was already fraying by the time the UN Charter was signed. Whether that makes the UN a success story or simply a more durable version of the same unresolved tension is a question historians, and this course, leave open.",
+  },
+};
+
+/**
+ * The long-form narrative essay for each week — 5-6 paragraphs, meant to read
+ * like a short lecture. Shown as the main content of a week's story modal.
  */
 const CHRONICLES = {
   1: [
