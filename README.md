@@ -33,5 +33,8 @@ then open `http://localhost:8000`.
 
 ## Deploying
 
-Since it's a static site, it can be published as-is via GitHub Pages (Settings → Pages →
-deploy from this branch) or any static host.
+The site is published via GitHub Pages using GitHub Actions
+([`.github/workflows/pages.yml`](.github/workflows/pages.yml)): every push to this branch
+rebuilds and redeploys automatically.
+
+Live at: **https://atakanyilmaz94.github.io/Social_Science/**
