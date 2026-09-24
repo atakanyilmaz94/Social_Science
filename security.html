@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Issues in International Security — POL4772</title>
+<meta name="description" content="An interactive guide to POL4772 Issues in International Security: weekly concepts, a toolkit for the Weekly Security Brief and case presentations, and a library of real cases to sign up for." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css?v=6" />
+</head>
+<body>
+<div id="scroll-progress"></div>
+
+<nav class="site-nav">
+  <div class="container site-nav__inner">
+    <a href="#top" class="site-nav__brand">POL4772 <span>International Security</span></a>
+    <ul class="site-nav__links">
+      <li><a href="#syllabus">Syllabus</a></li>
+      <li><a href="#toolkit">Toolkit</a></li>
+      <li><a href="#cases">Cases</a></li>
+      <li><a href="index.html">Diplomatic History →</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="container">
+    <p class="eyebrow">POL4772 · Issues in International Security</p>
+    <h1 class="hero__title">Security Isn't Just About Armies Anymore</h1>
+    <p class="hero__subtitle">
+      From nuclear deterrence to cyberattacks, civil wars to pandemics — this course covers
+      the theories that explain international security threats, and asks you to apply them
+      to what's actually happening in the world right now. Every week, you'll connect
+      real cases to real concepts.
+    </p>
+    <div class="hero__cta">
+      <a href="#syllabus" class="btn btn--primary">View the Syllabus</a>
+      <a href="#cases" class="btn btn--ghost">Browse the Case Library</a>
+    </div>
+    <div class="hero__scroll-hint">
+      Scroll to explore
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 5v14M5 12l7 7 7-7" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </div>
+  </div>
+</header>
+
+<section class="section section--alt" id="course-info">
+  <div class="container">
+    <div class="course-info-grid">
+      <div class="course-info-card">
+        <p class="eyebrow">Course at a Glance</p>
+        <h2>POL4772 International Security</h2>
+        <p class="course-info-instructor">Instructor: <span id="course-instructor"></span></p>
+        <div class="course-meta" id="course-meta"></div>
+      </div>
+      <div class="course-info-card">
+        <h3>Suggested Reading</h3>
+        <ul class="course-books" id="course-books"></ul>
+      </div>
+      <div class="course-info-card">
+        <h3>Grading Breakdown</h3>
+        <div id="course-grading"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="syllabus">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">Weekly Syllabus</p>
+      <h2>What we cover, week by week</h2>
+      <p>Swipe or scroll through the course plan. Weeks with a presentation prompt link straight down to that week's case library.</p>
+    </div>
+
+    <div class="weeks-carousel">
+      <div class="weeks-track" id="weeks-track"></div>
+      <div class="weeks-controls">
+        <button class="weeks-arrow" id="weeks-prev" aria-label="Previous weeks">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="weeks-dots" id="weeks-dots"></div>
+        <button class="weeks-arrow" id="weeks-next" aria-label="Next weeks">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--alt" id="toolkit">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">Your Toolkit</p>
+      <h2>The two assessments that reward following the news</h2>
+      <p>Both the Weekly Security Brief and your case presentation are graded on how well you connect course theory to a real, specific case — not on how much you memorize.</p>
+    </div>
+    <div class="rubric-grid">
+      <div id="rubric-brief"></div>
+      <div id="rubric-presentation"></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="cases">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">Case Library</p>
+      <h2>Real cases, ready to sign up for</h2>
+      <p>Every case below is a real, documented event or organization. Pick one for your presentation — signing up emails the instructor directly with your choice, so two students don't land on the same case.</p>
+    </div>
+
+    <div class="era-filters" id="category-filters"></div>
+
+    <div id="case-library"></div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>POL4772 Issues in International Security · &copy; <span id="year"></span></p>
+    <p><a href="index.html">Also teaching: POL3415 Diplomatic History →</a></p>
+  </div>
+</footer>
+
+<script src="js/security-data.js?v=1"></script>
+<script src="js/security-app.js?v=1"></script>
+</body>
+</html>
