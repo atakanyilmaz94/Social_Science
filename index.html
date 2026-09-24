@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>History of Diplomacy — POLSIR Course Guide</title>
+<meta name="description" content="An interactive syllabus and infographic timeline of diplomatic history, from the 1648 Peace of Westphalia to the end of World War II in 1945." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<div id="scroll-progress"></div>
+
+<nav class="site-nav">
+  <div class="container site-nav__inner">
+    <a href="#top" class="site-nav__brand">History of <span>Diplomacy</span></a>
+    <ul class="site-nav__links">
+      <li><a href="#syllabus">Syllabus</a></li>
+      <li><a href="#timeline">Timeline</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="container">
+    <p class="eyebrow">POLSIR · History of Diplomacy</p>
+    <h1 class="hero__title">From Westphalia to the End of World War&nbsp;II</h1>
+    <p class="hero__subtitle">
+      A 12-week journey through the diplomatic history of the modern state system —
+      scroll through the weekly syllabus and explore the infographic timeline of the
+      events that shaped it.
+    </p>
+    <div class="hero__meta">
+      <span>1648 – 1945</span>
+      <span>12 Weeks</span>
+      <span>4 Eras</span>
+    </div>
+    <div class="hero__cta">
+      <a href="#syllabus" class="btn btn--primary">View Syllabus</a>
+      <a href="#timeline" class="btn btn--ghost">Explore Timeline</a>
+    </div>
+    <div class="hero__scroll-hint">
+      Scroll to explore
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 5v14M5 12l7 7 7-7" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </div>
+  </div>
+</header>
+
+<section class="section" id="syllabus">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">Weekly Syllabus</p>
+      <h2>What we cover, week by week</h2>
+      <p>Swipe or scroll through the course plan — each card marks the week's topic and its place in the broader era of diplomatic history.</p>
+    </div>
+
+    <div class="weeks-carousel">
+      <div class="weeks-track" id="weeks-track"></div>
+      <div class="weeks-controls">
+        <button class="weeks-arrow" id="weeks-prev" aria-label="Previous weeks">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="weeks-dots" id="weeks-dots"></div>
+        <button class="weeks-arrow" id="weeks-next" aria-label="Next weeks">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--alt" id="timeline">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">Infographic Timeline</p>
+      <h2>The events that defined the era</h2>
+      <p>Filter by era to trace how diplomacy evolved from the sovereign state system of 1648 to the postwar order of 1945.</p>
+    </div>
+
+    <div class="era-filters" id="era-filters"></div>
+
+    <div class="timeline" id="timeline-list"></div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>History of Diplomacy · POLSIR Course Guide · &copy; <span id="year"></span></p>
+  </div>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
