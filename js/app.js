@@ -183,6 +183,7 @@
       const assessmentHtml = w.assessment
         ? `<span class="week-card__assessment">${w.assessment}</span>`
         : "";
+      const meta = WEEK_META[w.week];
 
       card.innerHTML = `
         <div class="week-card__top">
@@ -197,7 +198,13 @@
           <span class="week-card__era">${era.label}</span>
           ${assessmentHtml}
         </div>
-        <button type="button" class="week-card__story-btn" data-story-week="${w.week}">Read the Story →</button>
+        <button type="button" class="week-card__story-btn" data-story-week="${w.week}">
+          <span class="week-card__story-btn-icon" aria-hidden="true">📖</span>
+          <span>
+            <span class="week-card__story-btn-label">Read the full story</span>
+            <span class="week-card__story-btn-teaser">${meta.whyItMatters}</span>
+          </span>
+        </button>
       `;
       track.appendChild(card);
     });

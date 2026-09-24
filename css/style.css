@@ -430,24 +430,47 @@ h3 {
 }
 
 .week-card__story-btn {
-  display: block;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
   width: 100%;
   margin-top: 14px;
-  padding: 10px 14px;
-  border-radius: 10px;
-  border: 1px solid var(--era-color, var(--accent));
-  background: transparent;
-  color: var(--era-color, var(--accent));
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: none;
+  background: var(--era-color, var(--accent));
+  color: #fff;
   font-family: var(--font-body);
-  font-size: 0.85rem;
-  font-weight: 600;
+  text-align: left;
   cursor: pointer;
-  transition: background 0.2s, color 0.2s;
+  box-shadow: 0 6px 16px -6px var(--era-color, var(--accent));
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .week-card__story-btn:hover {
-  background: var(--era-color, var(--accent));
-  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px -6px var(--era-color, var(--accent));
+}
+
+.week-card__story-btn-icon {
+  font-size: 1.3rem;
+  flex: none;
+  margin-top: 1px;
+}
+
+.week-card__story-btn-label {
+  display: block;
+  font-weight: 700;
+  font-size: 0.86rem;
+  margin-bottom: 3px;
+}
+
+.week-card__story-btn-teaser {
+  display: block;
+  font-size: 0.76rem;
+  font-weight: 400;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.88);
 }
 
 @keyframes week-pulse {
