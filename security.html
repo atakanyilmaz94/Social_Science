@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="css/style.css?v=6" />
+<link rel="stylesheet" href="css/style.css?v=7" />
 </head>
 <body>
 <div id="scroll-progress"></div>
@@ -120,6 +120,25 @@
   </div>
 </section>
 
+<div class="story-overlay" id="story-overlay">
+  <div class="story-modal" role="dialog" aria-modal="true" aria-labelledby="story-title">
+    <button type="button" class="story-close" id="story-close" aria-label="Close">✕</button>
+    <div class="story-header">
+      <span class="story-header__week" id="story-week-num"></span>
+      <h2 class="story-header__title" id="story-title"></h2>
+      <p class="story-header__topic" id="story-topic"></p>
+    </div>
+
+    <div class="story-video" id="story-video" hidden></div>
+
+    <div class="story-chronicle" id="story-chronicle"></div>
+
+    <div class="story-podcast" id="story-podcast" hidden></div>
+
+    <div class="story-learnmore" id="story-caselink" hidden></div>
+  </div>
+</div>
+
 <footer class="site-footer">
   <div class="container">
     <p>POL4772 Issues in International Security · &copy; <span id="year"></span></p>
@@ -127,7 +146,7 @@
   </div>
 </footer>
 
-<script src="js/security-data.js?v=1"></script>
-<script src="js/security-app.js?v=1"></script>
+<script src="js/security-data.js?v=2"></script>
+<script src="js/security-app.js?v=2"></script>
 </body>
 </html>

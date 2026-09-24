@@ -52,15 +52,9 @@
         ? `<span class="week-card__assessment">${w.assessment}</span>`
         : "";
       const hasCases = !!CASES[w.week];
-      const caseBtnHtml = hasCases
-        ? `<button type="button" class="week-card__story-btn" data-case-week="${w.week}">
-             <span class="week-card__story-btn-icon" aria-hidden="true">🗂️</span>
-             <span>
-               <span class="week-card__story-btn-label">View cases &amp; sign up</span>
-               <span class="week-card__story-btn-teaser">${CASES[w.week].cases.length} real cases to choose from for this week's presentation.</span>
-             </span>
-           </button>`
-        : "";
+      const caseTeaser = hasCases
+        ? `${CASES[w.week].cases.length} real cases to choose from for this week's presentation.`
+        : "A detailed briefing on this week's topic, with video where available.";
 
       card.innerHTML = `
         <div class="week-card__top">
@@ -75,21 +69,31 @@
           <span class="week-card__era">${cat.label}</span>
           ${assessmentHtml}
         </div>
-        ${caseBtnHtml}
+        <button type="button" class="week-card__story-btn" data-info-week="${w.week}">
+          <span class="week-card__story-btn-icon" aria-hidden="true">📘</span>
+          <span>
+            <span class="week-card__story-btn-label">Learn more</span>
+            <span class="week-card__story-btn-teaser">${caseTeaser}</span>
+          </span>
+        </button>
       `;
       track.appendChild(card);
     });
 
     track.addEventListener("click", (e) => {
-      const btn = e.target.closest("[data-case-week]");
+      const btn = e.target.closest("[data-info-week]");
       if (!btn) return;
-      const target = document.getElementById(`case-group-${btn.dataset.caseWeek}`);
-      if (target) {
-        target.scrollIntoView({ behavior: "smooth", block: "start" });
-        target.classList.add("is-highlighted");
-        setTimeout(() => target.classList.remove("is-highlighted"), 2600);
-      }
+      openWeekInfo(Number(btn.dataset.infoWeek));
     });
+  }
+
+  function scrollToCaseGroup(weekNum) {
+    const target = document.getElementById(`case-group-${weekNum}`);
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+      target.classList.add("is-highlighted");
+      setTimeout(() => target.classList.remove("is-highlighted"), 2600);
+    }
   }
 
   function initCarousel() {
@@ -132,6 +136,112 @@
     nextBtn.addEventListener("click", () => track.scrollBy({ left: track.clientWidth * 0.8, behavior: "smooth" }));
     track.addEventListener("scroll", () => window.requestAnimationFrame(updateActive));
     updateActive();
+  }
+
+  /* ---------- Week info modal ---------- */
+
+  let activeInfoWeek = null;
+  let lastFocusedEl = null;
+
+  function openWeekInfo(weekNum) {
+    const week = WEEKS2.find((w) => w.week === weekNum);
+    const cat = categoryById[week.category];
+    activeInfoWeek = weekNum;
+    lastFocusedEl = document.activeElement;
+
+    document.getElementById("story-week-num").textContent = `Week ${week.week}`;
+    document.getElementById("story-week-num").style.color = cat.color;
+    document.getElementById("story-title").textContent = week.hook;
+    document.getElementById("story-topic").textContent = week.topic;
+
+    const video = VIDEOS2[weekNum];
+    const videoEl = document.getElementById("story-video");
+    if (video) {
+      videoEl.hidden = false;
+      videoEl.innerHTML = `
+        <p class="story-video__label">🎥 Watch this week, explained</p>
+        <button type="button" class="story-video__thumb" aria-label="Play video: ${video.title}">
+          <img src="https://img.youtube.com/vi/${video.id}/hqdefault.jpg" alt="" loading="lazy" />
+          <span class="story-video__play" aria-hidden="true">▶</span>
+        </button>
+        <p class="story-video__meta">
+          ${video.title}${video.channel ? ` · ${video.channel}` : ""} —
+          <a href="https://www.youtube.com/watch?v=${video.id}" target="_blank" rel="noopener noreferrer">watch on YouTube ↗</a>
+        </p>
+      `;
+      videoEl.querySelector(".story-video__thumb").addEventListener("click", () => {
+        videoEl.querySelector(".story-video__thumb").outerHTML = `
+          <div class="story-video__frame">
+            <iframe
+              src="https://www.youtube.com/embed/${video.id}?autoplay=1"
+              title="${video.title}"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+            ></iframe>
+          </div>
+        `;
+      });
+    } else {
+      videoEl.hidden = true;
+      videoEl.innerHTML = "";
+    }
+
+    const paragraphs = PRIMERS[weekNum] || [];
+    const wordCount = paragraphs.join(" ").split(/\s+/).length;
+    const readMins = Math.max(1, Math.round(wordCount / 200));
+    const chronicleEl = document.getElementById("story-chronicle");
+    chronicleEl.innerHTML = `
+      <p class="story-chronicle__meta">${readMins} min read</p>
+      ${paragraphs.map((p) => `<p>${p}</p>`).join("")}
+    `;
+
+    const podcast = PODCASTS2[weekNum];
+    const podcastEl = document.getElementById("story-podcast");
+    if (podcast) {
+      podcastEl.hidden = false;
+      podcastEl.innerHTML = `🎙️ For ongoing coverage of topics like this, <a href="${podcast.url}" target="_blank" rel="noopener noreferrer">${podcast.name} ↗</a> is worth a listen.`;
+    } else {
+      podcastEl.hidden = true;
+      podcastEl.innerHTML = "";
+    }
+
+    const caselinkEl = document.getElementById("story-caselink");
+    if (CASES[weekNum]) {
+      caselinkEl.hidden = false;
+      caselinkEl.innerHTML = `
+        <span>This week has a presentation prompt with real cases to choose from.</span>
+        <button type="button" class="btn btn--primary" id="story-caselink-btn">View this week's cases ↓</button>
+      `;
+      document.getElementById("story-caselink-btn").addEventListener("click", () => {
+        closeWeekInfo();
+        setTimeout(() => scrollToCaseGroup(weekNum), 150);
+      });
+    } else {
+      caselinkEl.hidden = true;
+      caselinkEl.innerHTML = "";
+    }
+
+    const overlay = document.getElementById("story-overlay");
+    overlay.classList.add("is-open");
+    document.body.classList.add("story-open");
+    document.getElementById("story-close").focus();
+  }
+
+  function closeWeekInfo() {
+    document.getElementById("story-overlay").classList.remove("is-open");
+    document.body.classList.remove("story-open");
+    activeInfoWeek = null;
+    if (lastFocusedEl) lastFocusedEl.focus();
+  }
+
+  function initWeekInfoModal() {
+    document.getElementById("story-close").addEventListener("click", closeWeekInfo);
+    document.getElementById("story-overlay").addEventListener("click", (e) => {
+      if (e.target.id === "story-overlay") closeWeekInfo();
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && activeInfoWeek !== null) closeWeekInfo();
+    });
   }
 
   /* ---------- Rubric / toolkit ---------- */
@@ -296,6 +406,7 @@
     renderCourseInfo();
     renderWeeks();
     initCarousel();
+    initWeekInfoModal();
     renderRubric("brief", "rubric-brief");
     renderRubric("presentation", "rubric-presentation");
     renderCategoryFilters();
